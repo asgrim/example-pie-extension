@@ -1,0 +1,13 @@
+{
+    "name": "ext-example-pie-extension",
+    "type": "php-ext",
+    "license": "MIT",
+    "description": "Example PIE extension",
+    "require": {
+        "php": ">=7.1,<8.4"
+    },
+    "php-ext": {
+        "priority": 74,
+        "configure-options": []
+    }
+}
