@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  phpt-tests:
+    name: "PHPT Tests"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-22.04
+        php-version:
+          - 7.1
+          - 7.2
+          - 7.3
+          - 7.4
+          - 8.0
+          - 8.1
+          - 8.2
+          - 8.3
+        thread-safety:
+          - zts
+          - nts
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP ${{ matrix.php-version }} ${{ matrix.thread-safety }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+        env:
+          phpts: ${{ matrix.thread-safety }}
+          fail-fast: true
+      - name: Build
+        run: |
+          phpize
+          ./configure --enable-example-pie-extension
+          make
+      - name: Test
+        run: make test
