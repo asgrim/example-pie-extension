@@ -5,6 +5,18 @@ on:
   pull_request:
 
 jobs:
+# NOTE: commented out as it will fail until Composer 2.8 is released
+#  composer-validate:
+#    name: "Validate using Composer"
+#    runs-on: ubuntu-22.04
+#    steps:
+#     - uses: actions/checkout@v4
+#     - name: Setup PHP
+#       uses: shivammathur/setup-php@v2
+#       with:
+#         php-version: 8.3
+#     - name: Validate
+#       run: composer validate
   phpt-tests:
     name: "PHPT Tests"
     runs-on: ${{ matrix.os }}
