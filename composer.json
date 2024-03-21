@@ -1,12 +1,16 @@
 {
-    "name": "ext-example-pie-extension",
+    "name": "asgrim/example-pie-extension",
     "type": "php-ext",
     "license": "MIT",
     "description": "Example PIE extension",
     "require": {
         "php": ">=7.1,<8.4"
     },
+    "replace": {
+        "ext-example-pie-extension": "*"
+    },
     "php-ext": {
+        "extension-name": "ext-example-pie-extension",
         "priority": 74,
         "configure-options": []
     }
