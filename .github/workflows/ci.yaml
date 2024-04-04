@@ -26,10 +26,10 @@ jobs:
         os:
           - windows-2019
         php-version:
-          - 8.0
-          - 8.1
-          - 8.2
-          - 8.3
+          - "8.0"
+          - "8.1"
+          - "8.2"
+          - "8.3"
         thread-safety:
           - ts
           - nts
@@ -37,14 +37,14 @@ jobs:
           - x64
     steps:
       - uses: actions/checkout@v4
-      - name: Build the extension
-        uses: php/php-windows-builder/extension@v1
+      - name: Build and test the extension
+        uses: php/php-windows-builder/extension@master
         with:
           php-version: ${{ matrix.php-version }}
           ts: ${{ matrix.thread-safety }}
           arch: ${{ matrix.arch }}
-      - name: Test
-        run: make test
+          args: --enable-example-pie-extension
+          run-tests: true
   linux-phpt-tests:
     name: "Linux PHPT Tests"
     runs-on: ${{ matrix.os }}

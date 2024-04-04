@@ -9,6 +9,6 @@
 		ADD_FLAG('CFLAGS_EXAMPLE_PIE_EXTENSION', '/D WIN32_ONLY_COMPILER=1 /wd4005');
 		PHP_INSTALL_HEADERS("ext/example-pie-extension", "php_example_pie_extension.h");
 
-		EXTENSION('scoutapm', ext_sources, true);
+		EXTENSION('example_pie_extension', ext_sources, true);
 	}
 })();
