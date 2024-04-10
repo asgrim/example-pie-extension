@@ -9,16 +9,44 @@ jobs:
     name: "Validate using Composer"
     runs-on: ubuntu-22.04
     steps:
-     - uses: actions/checkout@v4
-     - name: Setup PHP
-       uses: shivammathur/setup-php@v2
-       with:
-         php-version: 8.3
-         tools: composer:snapshot
-     - name: Validate
-       run: composer validate
-  phpt-tests:
-    name: "PHPT Tests"
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          tools: composer:snapshot
+      - name: Validate
+        run: composer validate
+  windows-phpt-tests:
+    name: "Windows PHPT Tests"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - windows-2019
+        php-version:
+          - "8.0"
+          - "8.1"
+          - "8.2"
+          - "8.3"
+        thread-safety:
+          - ts
+          - nts
+        arch:
+          - x64
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test the extension
+        uses: php/php-windows-builder/extension@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          ts: ${{ matrix.thread-safety }}
+          arch: ${{ matrix.arch }}
+          args: --enable-example-pie-extension
+          run-tests: true
+  linux-phpt-tests:
+    name: "Linux PHPT Tests"
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
