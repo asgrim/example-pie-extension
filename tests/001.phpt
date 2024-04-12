@@ -11,4 +11,4 @@ if (!extension_loaded('example-pie-extension')) {
 example_pie_extension_test();
 ?>
 --EXPECT--
-Hello!
+Hello2!
