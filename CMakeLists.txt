@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(example-pie-extension C)
+project(example_pie_extension C)
 
 set(SOURCE_FILES
         zend_example_pie_extension.c

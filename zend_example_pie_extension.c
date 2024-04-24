@@ -63,7 +63,7 @@ static const zend_function_entry example_pie_extension_functions[] = {
  */
 zend_module_entry example_pie_extension_module_entry = {
         STANDARD_MODULE_HEADER,
-        "example-pie-extension",					/* Extension name */
+        "example_pie_extension",					/* Extension name */
         example_pie_extension_functions,			/* zend_function_entry */
         NULL,				/* PHP_MINIT - Module initialization */
         NULL,							/* PHP_MSHUTDOWN - Module shutdown */
