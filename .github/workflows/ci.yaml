@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and test the extension
-        uses: php/php-windows-builder/extension@master
+        uses: php/php-windows-builder/extension@v1
         with:
           php-version: ${{ matrix.php-version }}
           ts: ${{ matrix.thread-safety }}

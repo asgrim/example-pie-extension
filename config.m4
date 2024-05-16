@@ -1,4 +1,4 @@
-dnl config.m4 for extension example-pie-extension
+dnl config.m4 for extension example_pie_extension
 
 PHP_ARG_ENABLE([example-pie-extension],
   [whether to enable example-pie-extension support],

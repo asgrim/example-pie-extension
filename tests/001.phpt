@@ -2,7 +2,7 @@
 Check if extension works
 --SKIPIF--
 <?php
-if (!extension_loaded('example-pie-extension')) {
+if (!extension_loaded('example_pie_extension')) {
   echo 'skip';
 }
 ?>
@@ -11,4 +11,4 @@ if (!extension_loaded('example-pie-extension')) {
 example_pie_extension_test();
 ?>
 --EXPECT--
-Hello!
+Hello2!

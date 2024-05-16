@@ -7,10 +7,10 @@
         "php": ">=8.3,<8.4"
     },
     "replace": {
-        "ext-example-pie-extension": "*"
+        "ext-example_pie_extension": "*"
     },
     "php-ext": {
-        "extension-name": "ext-example-pie-extension",
+        "extension-name": "ext-example_pie_extension",
         "priority": 74,
         "configure-options": []
     }
