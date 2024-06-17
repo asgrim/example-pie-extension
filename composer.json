@@ -12,6 +12,11 @@
     "php-ext": {
         "extension-name": "ext-example_pie_extension",
         "priority": 74,
-        "configure-options": []
+        "configure-options": [
+            {
+                "name": "enable-example-pie-extension",
+                "description": "whether to enable example-pie-extension support"
+            }
+        ]
     }
 }
