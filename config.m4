@@ -6,6 +6,12 @@ PHP_ARG_ENABLE([example-pie-extension],
     [Enable example-pie-extension support])],
   [no])
 
+PHP_ARG_WITH([hello-name],
+  [hello name],
+  [name to use for hello],
+  [no],
+  [no])
+
 if test "$PHP_EXAMPLE_PIE_EXTENSION" != "no"; then
 
   MAINTAINER_CFLAGS="-std=gnu99"
@@ -14,6 +20,12 @@ if test "$PHP_EXAMPLE_PIE_EXTENSION" != "no"; then
   PHP_EXAMPLE_PIE_EXTENSION_CFLAGS="-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 $STD_CFLAGS $MAINTAINER_CFLAGS"
 
   AC_DEFINE(HAVE_EXAMPLE_PIE_EXTENSION, 1, [ Have extension support ])
+
+  if test "$PHP_HELLO_NAME" == "no"; then
+    AC_DEFINE(HELLO_NAME, [ "world" ], [ Hello name ])
+  else
+    AC_DEFINE_UNQUOTED(HELLO_NAME, [ "$PHP_HELLO_NAME" ], [ Hello name ])
+  fi
 
   PHP_NEW_EXTENSION(
     example_pie_extension,
