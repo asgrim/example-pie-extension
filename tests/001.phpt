@@ -10,5 +10,5 @@ if (!extension_loaded('example_pie_extension')) {
 <?php
 example_pie_extension_test();
 ?>
---EXPECT--
-Hello2!
+--EXPECTF--
+Hello, %s!

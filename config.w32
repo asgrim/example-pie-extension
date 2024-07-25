@@ -1,11 +1,19 @@
 // vim:ft=javascript
 (function () {
 	ARG_ENABLE('example-pie-extension', 'Whether to enable example-pie-extension support', 'no');
+	ARG_WITH('hello-name', 'name to use for hello', 'no');
 
 	if (PHP_EXAMPLE_PIE_EXTENSION != 'no') {
 		var ext_sources = 'zend_example_pie_extension.c';
 
 		AC_DEFINE('HAVE_EXAMPLE_PIE_EXTENSION', 1);
+
+		if (PHP_HELLO_NAME == 'no') {
+			AC_DEFINE('HELLO_NAME', 'world');
+		} else {
+			AC_DEFINE('HELLO_NAME', PHP_HELLO_NAME);
+		}
+
 		ADD_FLAG('CFLAGS_EXAMPLE_PIE_EXTENSION', '/D WIN32_ONLY_COMPILER=1 /wd4005');
 		PHP_INSTALL_HEADERS("ext/example-pie-extension", "php_example_pie_extension.h");
 

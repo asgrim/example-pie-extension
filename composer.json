@@ -12,6 +12,16 @@
     "php-ext": {
         "extension-name": "ext-example_pie_extension",
         "priority": 74,
-        "configure-options": []
+        "configure-options": [
+            {
+                "name": "enable-example-pie-extension",
+                "description": "whether to enable example-pie-extension support"
+            },
+            {
+                "name": "with-hello-name",
+                "needs-value": true,
+                "description": "Name ot use when saying hello"
+            }
+        ]
     }
 }

@@ -23,7 +23,7 @@ PHP_FUNCTION(example_pie_extension_test)
 {
     ZEND_PARSE_PARAMETERS_NONE();
 
-    php_printf("Hello2!\r\n");
+    php_printf("Hello, %s!\r\n", HELLO_NAME);
 }
 /* }}} */
 
