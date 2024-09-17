@@ -4,7 +4,8 @@
     "license": "MIT",
     "description": "Example PIE extension",
     "require": {
-        "php": ">=8.3,<8.4"
+        "php": ">=8.3,<8.4",
+        "psr/log": "^3.0"
     },
     "replace": {
         "ext-example_pie_extension": "*"
