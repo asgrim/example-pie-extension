@@ -17,31 +17,32 @@ jobs:
           tools: composer:snapshot
       - name: Validate
         run: composer validate
+  windows-get-extension-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.extension-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get the extension matrix
+        id: extension-matrix
+        uses: php/php-windows-builder/extension-matrix@v1
+        with:
+          php-version-list: '7.4, 8.0, 8.1, 8.2, 8.3, 8.4'
   windows-phpt-tests:
+    needs: windows-get-extension-matrix
     name: "Windows PHPT Tests"
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
-      matrix:
-        os:
-          - windows-2019
-        php-version:
-          - "8.0"
-          - "8.1"
-          - "8.2"
-          - "8.3"
-        thread-safety:
-          - ts
-          - nts
-        arch:
-          - x64
+      matrix: ${{fromJson(needs.windows-get-extension-matrix.outputs.matrix)}}
+
     steps:
       - uses: actions/checkout@v4
       - name: Build and test the extension
         uses: php/php-windows-builder/extension@v1
         with:
           php-version: ${{ matrix.php-version }}
-          ts: ${{ matrix.thread-safety }}
+          ts: ${{ matrix.ts }}
           arch: ${{ matrix.arch }}
           args: --enable-example-pie-extension
           run-tests: true
