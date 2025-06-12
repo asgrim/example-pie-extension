@@ -5,8 +5,7 @@
     "description": "Example PIE extension",
     "require": {
         "php": ">=7.4,^8.0",
-        "psr/log": "^3.0",
-        "vlucas/phpdotenv": "^5.6"
+        "ext-bcmath": "*"
     },
     "replace": {
         "ext-example_pie_extension": "*"
