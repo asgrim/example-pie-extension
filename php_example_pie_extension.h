@@ -6,7 +6,7 @@
 extern zend_module_entry example_pie_extension_module_entry;
 # define phpext_example_pie_extension_ptr &example_pie_extension_module_entry
 
-# define PHP_EXAMPLE_PIE_EXTENSION_VERSION "2.0.4"
+# define PHP_EXAMPLE_PIE_EXTENSION_VERSION "2.0.5"
 
 # if defined(ZTS) && defined(COMPILE_DL_EXAMPLE_PIE_EXTENSION)
 ZEND_TSRMLS_CACHE_EXTERN()
