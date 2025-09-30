@@ -5,6 +5,7 @@
     "description": "Example PIE extension",
     "require": {
         "php": ">=7.4,^8.0",
+        "lib-asgrim": "*",
         "lib-sodium": "*"
     },
     "replace": {

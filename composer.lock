@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "afd3dd85ab2c08af818cef2d2b7eddaa",
+    "content-hash": "872e629509a9f66b6604efb2f6e9fbcf",
     "packages": [],
     "packages-dev": [],
     "aliases": [],
@@ -14,6 +14,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.4,^8.0",
+        "lib-asgrim": "*",
         "lib-sodium": "*"
     },
     "platform-dev": {},
