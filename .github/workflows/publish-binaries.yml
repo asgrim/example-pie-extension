@@ -1,0 +1,78 @@
+name: Build and release binaries
+
+on:
+  push:
+#    tags: # @todo uncomment
+#      - '*'
+
+permissions:
+  contents: read
+
+env:
+  RELEASE_TAG: 0.0.0-fake+run_${{ github.run_id }}_${{ github.run_attempt }}
+
+jobs:
+  # This first step will create a *draft* release based on the tag name. In the
+  # case where immutable releases are enabled, the release MUST be in draft
+  # mode, otherwise we would not be able to attach the release assets (since
+  # the release is immutable once published.
+  create-draft-release:
+    runs-on: ubuntu-latest
+    permissions:
+      # contents:write is required to create the draft release
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-tags: 'true'
+          ref: ${{ github.ref }}
+
+      - name: Create a fake tag for the build
+        run: |
+          git config --global user.email "Fake User"
+          git config --global user.name "fake-user@example.com"
+          git tag -a -m "test tag for CI build ${{ github.run_id }}" ${{ env.RELEASE_TAG }}
+          git push origin ${{ env.RELEASE_TAG }}
+
+      - name: Create draft release from tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ env.RELEASE_TAG }}" --title "${{ env.RELEASE_TAG }}" --draft --notes-from-tag
+
+  add-pie-binaries:
+    runs-on: ${{ matrix.operating-system }}
+    # The matrix defines which combination of binaries you want to build
+    strategy:
+      matrix:
+        operating-system:
+          - ubuntu-latest
+        php-versions:
+          - 8.3
+          - 8.4
+        zts-mode:
+          - ts
+          - nts
+    permissions:
+      # contents:write is required to upload to the release assets
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # Install the desired version of PHP in order to build the extension for it
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+        env:
+          phpts: ${{ matrix.zts-mode }}
+
+      # Finally, this invokes the action, which builds the extension, creates
+      # the archive with the correct naming, and uploads it to the release for
+      # the given tag name
+      - name: Build and release
+        id: php-ext-binary-builder
+        uses: php/pie-ext-binary-builder@0.0.1
+        with:
+          release-tag: ${{ env.RELEASE_TAG }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
