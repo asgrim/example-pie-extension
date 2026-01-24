@@ -2,14 +2,11 @@ name: Build and release binaries
 
 on:
   push:
-#    tags: # @todo uncomment
-#      - '*'
+    tags:
+      - '*'
 
 permissions:
   contents: read
-
-env:
-  RELEASE_TAG: 0.0.0-fake+run_${{ github.run_id }}_${{ github.run_attempt }}
 
 jobs:
   # This first step will create a *draft* release based on the tag name. In the
@@ -27,17 +24,10 @@ jobs:
           fetch-tags: 'true'
           ref: ${{ github.ref }}
 
-      - name: Create a fake tag for the build
-        run: |
-          git config --global user.email "Fake User"
-          git config --global user.name "fake-user@example.com"
-          git tag -a -m "test tag for CI build ${{ github.run_id }}" ${{ env.RELEASE_TAG }}
-          git push origin ${{ env.RELEASE_TAG }}
-
       - name: Create draft release from tag
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${{ env.RELEASE_TAG }}" --title "${{ env.RELEASE_TAG }}" --draft --notes-from-tag
+        run: gh release create "${{ github.ref_name }}" --title "${{ github.ref_name }}" --draft --notes-from-tag
 
   add-pie-binaries:
     needs: [ create-draft-release ]
@@ -76,7 +66,7 @@ jobs:
         uses: php/pie-ext-binary-builder@0.0.1
         with:
           configure-flags: '--with-hello-name=PREBUILT_${{ github.run_id }}_${{ github.run_attempt }}'
-          release-tag: ${{ env.RELEASE_TAG }}
+          release-tag: ${{ github.ref_name }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   get-extension-matrix:
@@ -112,10 +102,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ github.event_name == 'release' }}
     steps:
       - name: Upload artifact to the release
         uses: php/php-windows-builder/release@v1
         with:
-          release: ${{ github.event.release.tag_name }}
+          release: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
