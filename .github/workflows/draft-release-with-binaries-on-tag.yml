@@ -1,4 +1,4 @@
-name: Build and release binaries
+name: Draft a release and attach binaries
 
 on:
   push:
@@ -9,6 +9,7 @@ permissions:
   contents: read
 
 jobs:
+  ################### Draft the Release ###################
   # This first step will create a *draft* release based on the tag name. In the
   # case where immutable releases are enabled, the release MUST be in draft
   # mode, otherwise we would not be able to attach the release assets (since
@@ -29,7 +30,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh release create "${{ github.ref_name }}" --title "${{ github.ref_name }}" --draft --notes-from-tag
 
-  add-pie-binaries:
+  ################### Linux Binaries ###################
+  linux-binaries:
     needs: [ create-draft-release ]
     runs-on: ${{ matrix.operating-system }}
     # The matrix defines which combination of binaries you want to build
@@ -38,7 +40,6 @@ jobs:
         operating-system:
           - ubuntu-latest
         php-versions:
-          - 8.3
           - 8.4
         zts-mode:
           - ts
@@ -47,8 +48,7 @@ jobs:
       # contents:write is required to upload to the release assets
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
 
       # Install the desired version of PHP in order to build the extension for it
       - name: Setup PHP
@@ -61,37 +61,35 @@ jobs:
       # Finally, this invokes the action, which builds the extension, creates
       # the archive with the correct naming, and uploads it to the release for
       # the given tag name
-      - name: Build and release
-        id: php-ext-binary-builder
+      - name: Build Linux binaries
         uses: php/pie-ext-binary-builder@0.0.1
         with:
           configure-flags: '--with-hello-name=PREBUILT_${{ github.run_id }}_${{ github.run_attempt }}'
           release-tag: ${{ github.ref_name }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  get-extension-matrix:
+  ################### Windows Binaries ###################
+  windows-extension-matrix:
     needs: [ create-draft-release ]
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.extension-matrix.outputs.matrix }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Get the extension matrix
         id: extension-matrix
         uses: php/php-windows-builder/extension-matrix@v1
         with:
           php-version-list: '7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5'
 
-  build:
-    needs: get-extension-matrix
+  windows-build:
+    needs: windows-extension-matrix
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: ${{fromJson(needs.get-extension-matrix.outputs.matrix)}}
+      matrix: ${{fromJson(needs.windows-extension-matrix.outputs.matrix)}}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build the extension
+      - uses: actions/checkout@v6
+      - name: Build the extension for Windows
         uses: php/php-windows-builder/extension@v1
         with:
           php-version: ${{ matrix.php-version }}
@@ -99,9 +97,9 @@ jobs:
           ts: ${{ matrix.ts }}
           args: '--with-hello-name=WINDOWS_${{ github.run_id }}_${{ github.run_attempt }}'
 
-  release:
+  windows-release:
     runs-on: ubuntu-latest
-    needs: build
+    needs: windows-build
     steps:
       - name: Upload artifact to the release
         uses: php/php-windows-builder/release@v1
