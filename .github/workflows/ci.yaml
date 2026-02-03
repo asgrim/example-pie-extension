@@ -7,23 +7,23 @@ on:
 jobs:
   composer-validate:
     name: "Validate using Composer"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
-          tools: composer:snapshot
+          php-version: 8.5
+          tools: composer:2.9.5
       - name: Validate
         run: composer validate
+
   windows-get-extension-matrix:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.extension-matrix.outputs.matrix }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Get the extension matrix
         id: extension-matrix
         uses: php/php-windows-builder/extension-matrix@v1
@@ -35,9 +35,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix: ${{fromJson(needs.windows-get-extension-matrix.outputs.matrix)}}
-
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build and test the extension
         uses: php/php-windows-builder/extension@v1
         with:
@@ -46,6 +45,7 @@ jobs:
           arch: ${{ matrix.arch }}
           args: --enable-example-pie-extension
           run-tests: true
+
   linux-phpt-tests:
     name: "Linux PHPT Tests"
     runs-on: ${{ matrix.os }}
@@ -66,7 +66,7 @@ jobs:
           - zts
           - nts
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup PHP ${{ matrix.php-version }} ${{ matrix.thread-safety }}
         uses: shivammathur/setup-php@v2
         with:
