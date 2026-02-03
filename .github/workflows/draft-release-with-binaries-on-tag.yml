@@ -109,3 +109,4 @@ jobs:
         with:
           release: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          draft: 'true'
