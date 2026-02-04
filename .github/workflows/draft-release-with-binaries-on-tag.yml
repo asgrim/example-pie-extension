@@ -62,7 +62,7 @@ jobs:
       # the archive with the correct naming, and uploads it to the release for
       # the given tag name
       - name: Build Linux binaries
-        uses: php/pie-ext-binary-builder@0.0.1
+        uses: php/pie-ext-binary-builder@0.0.2
         with:
           configure-flags: '--with-hello-name=PREBUILT_${{ github.run_id }}_${{ github.run_attempt }}'
           release-tag: ${{ github.ref_name }}
